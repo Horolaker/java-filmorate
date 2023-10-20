@@ -101,24 +101,24 @@ drop sequence if exists review_sequence;
 create sequence if not exists review_sequence START with 1 minvalue 1 increment by 1;
 
 drop table if exists review_dislike cascade;
-CREATE TABLE IF NOT EXISTS `review_dislike` (
-    `review_id` integer NOT NULL,
-    `user_id` integer NOT NULL
+CREATE TABLE IF NOT EXISTS review_dislike (
+    review_id integer NOT NULL,
+    user_id integer NOT NULL
 );
 
-ALTER TABLE `review_dislike` ADD FOREIGN KEY (`review_id`) REFERENCES `reviews` (`review_id`);
+ALTER TABLE review_dislike ADD FOREIGN KEY (review_id) REFERENCES reviews (review_id);
 
-ALTER TABLE `review_dislike` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+ALTER TABLE review_dislike ADD FOREIGN KEY (user_id) REFERENCES users (user_id);
 
 drop table if exists review_like cascade;
-CREATE TABLE IF NOT EXISTS `review_like` (
-    `review_id` integer NOT NULL,
-    `user_id` integer NOT NULL
+CREATE TABLE IF NOT EXISTS review_like (
+   review_id integer NOT NULL,
+   user_id integer NOT NULL
 );
 
-ALTER TABLE `review_like` ADD FOREIGN KEY (`review_id`) REFERENCES `reviews` (`review_id`);
+ALTER TABLE review_like ADD FOREIGN KEY (review_id) REFERENCES reviews (review_id);
 
-ALTER TABLE `review_like` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+ALTER TABLE review_like ADD FOREIGN KEY (user_id) REFERENCES users (user_id);
 
 CREATE TYPE IF NOT EXISTS event_type_name AS ENUM ('LIKE', 'REVIEW', 'FRIEND');
 CREATE TYPE IF NOT EXISTS operation_type_name AS ENUM ('REMOVE', 'ADD', 'UPDATE');
@@ -131,6 +131,5 @@ CREATE TABLE IF NOT EXISTS events
     entity_id bigint,
     event_type event_type_name,
     operation_type operation_type_name,
-    time_stamp bigint,
-    PRIMARY KEY(event_id)
+    time_stamp bigint
 );
