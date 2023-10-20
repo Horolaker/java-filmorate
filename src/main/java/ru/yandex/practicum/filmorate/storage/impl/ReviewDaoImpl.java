@@ -63,7 +63,7 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     private void filmExistsValidation(Long filmId) {
-        if (filmId != null) {
+        if (filmId == null || filmDao.getFilmById(filmId).isEmpty()){
             if (filmDao.getFilmById(filmId).isEmpty()) {
                 throw new FilmNotExistException("Фильм с id: " + filmId + " не найден");
             }
