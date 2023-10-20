@@ -80,9 +80,6 @@ public class ReviewDaoImpl implements ReviewDao {
         jdbcTemplate.update(UPDATE_REVIEW.getTitle(),
                 review.getContent(),
                 review.getIsPositive(),
-//                review.getUserId(),
-//                review.getFilmId(),
-//                review.getUseful(),
                 review.getReviewId()
         );
         return getReviewById(review.getReviewId());
