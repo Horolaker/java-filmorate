@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface RecommendationDao {
 
+    /**
+     * Получить список фильмов в рекоммендации
+     */
     public List<Film> getRecommendation(Long userId);
 
 }
