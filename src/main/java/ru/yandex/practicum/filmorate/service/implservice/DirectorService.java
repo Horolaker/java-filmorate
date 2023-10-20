@@ -52,7 +52,7 @@ public class DirectorService {
     }
 
     public void validateDirectorsName(Director director) {
-        if (!director.getName().isBlank() && !director.getName().equals(" ")) {
+        if (!director.getName().isBlank()) {
             log.info("Проверка режиссёра пройдена");
         } else {
             throw new ValidationException("Ощибка в процессе валидации.");
