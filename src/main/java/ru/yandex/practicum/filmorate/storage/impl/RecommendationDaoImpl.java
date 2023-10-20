@@ -26,7 +26,7 @@ public class RecommendationDaoImpl implements RecommendationDao {
 
         List<Film> films = new ArrayList<Film>();
         try {
-            films = jdbcTemplate.query(GET_FILMS_RECOMMENDATION.getTitle(), new FilmMapper(),
+            films = jdbcTemplate.query(GET_FILMS_RECOMMENDATION.getQuery(), new FilmMapper(),
                     userId, userId, userId);
             for (Film film : films) {
                 if (film.getGenres() == null) {

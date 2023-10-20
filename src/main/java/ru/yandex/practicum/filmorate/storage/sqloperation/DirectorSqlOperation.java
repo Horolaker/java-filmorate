@@ -28,13 +28,13 @@ public enum DirectorSqlOperation {
             "WHERE film_id = ?");
 
 
-    private final String title;
+    private final String query;
 
-    DirectorSqlOperation(String title) {
-        this.title = title;
+    DirectorSqlOperation(String query) {
+        this.query = query;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuery() {
+        return query;
     }
 }

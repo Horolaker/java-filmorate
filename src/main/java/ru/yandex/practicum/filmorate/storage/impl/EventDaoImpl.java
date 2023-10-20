@@ -28,7 +28,7 @@ public class EventDaoImpl implements EventDao {
 
     @Override
     public List<Event> getUserFeed(Long id) {
-        List<Event> events = jdbcTemplate.query(GET_EVENT_BY_USER_ID.getTitle(), eventMapper, id);
+        List<Event> events = jdbcTemplate.query(GET_EVENT_BY_USER_ID.getQuery(), eventMapper, id);
         String result = events.stream()
                 .map(Event::toString)
                 .collect(Collectors.joining(", "));
@@ -61,7 +61,7 @@ public class EventDaoImpl implements EventDao {
     public Event getEvent(Long id) {
         checkEventId(id);
         String sqlEvent = "SELECT * FROM events WHERE event_id = ?";
-        Event event = jdbcTemplate.queryForObject(GET_EVENT_BY_EVENT_ID.getTitle(), eventMapper, id);
+        Event event = jdbcTemplate.queryForObject(GET_EVENT_BY_EVENT_ID.getQuery(), eventMapper, id);
         log.info("Найдено событие: {} ", id);
         return event;
     }
@@ -69,7 +69,7 @@ public class EventDaoImpl implements EventDao {
     public void checkEventId(Long eventId) {
 
         SqlRowSet sqlId = jdbcTemplate
-                .queryForRowSet(SELECT_EVENT_ID.getTitle(), eventId);
+                .queryForRowSet(SELECT_EVENT_ID.getQuery(), eventId);
 
         if (!sqlId.next()) {
             log.info("Событие с идентификатором {} не найдено.", eventId);

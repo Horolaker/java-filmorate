@@ -26,14 +26,14 @@ public class RatingDaoImpl implements RatingDao {
 
     @Override
     public List<Rating> getAllRatings() {
-        return jdbcTemplate.query(GET_ALL_RATINGS.getTitle(), new RatingMapper());
+        return jdbcTemplate.query(GET_ALL_RATINGS.getQuery(), new RatingMapper());
     }
 
     @Override
     public Optional<Rating> getRatingById(Long ratingId) {
         try {
             return Optional.ofNullable(
-                    jdbcTemplate.queryForObject(GET_RATING_BY_RATING_ID.getTitle(), new RatingMapper(), ratingId));
+                    jdbcTemplate.queryForObject(GET_RATING_BY_RATING_ID.getQuery(), new RatingMapper(), ratingId));
         } catch (DataAccessException e) {
             throw new RatingNotFoundException("Рейтинг не найден" + e.getMessage());
         }

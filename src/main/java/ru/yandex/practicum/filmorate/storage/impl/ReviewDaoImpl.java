@@ -77,7 +77,7 @@ public class ReviewDaoImpl implements ReviewDao {
         userIdExistsValidation(review.getUserId());
         filmExistsValidation(review.getFilmId());
 
-        jdbcTemplate.update(UPDATE_REVIEW.getTitle(),
+        jdbcTemplate.update(UPDATE_REVIEW.getQuery(),
                 review.getContent(),
                 review.getIsPositive(),
                 review.getReviewId()
@@ -87,15 +87,15 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public void delete(Long id) {
-        jdbcTemplate.update(DELETE_REVIEW_DISLIKES.getTitle(), id);
-        jdbcTemplate.update(DELETE_REVIEW.getTitle(), id);
+        jdbcTemplate.update(DELETE_REVIEW_DISLIKES.getQuery(), id);
+        jdbcTemplate.update(DELETE_REVIEW.getQuery(), id);
     }
 
     @Override
     public Optional<Review> getReviewById(Long reviewId) {
         try {
             return Optional.ofNullable(
-                    jdbcTemplate.queryForObject(GET_REVIEW_BY_REVIEW_ID.getTitle(), new ReviewMapper(), reviewId));
+                    jdbcTemplate.queryForObject(GET_REVIEW_BY_REVIEW_ID.getQuery(), new ReviewMapper(), reviewId));
         } catch (DataAccessException e) {
             throw new ReviewNotFoundException("Отзыв не найден" + e.getMessage());
         }
@@ -116,14 +116,14 @@ public class ReviewDaoImpl implements ReviewDao {
     @Override
     public void addLikeReview(Long reviewId, Long userId) {
         if (!isLike(reviewId, userId)) {
-            jdbcTemplate.update(CREATE_LIKE.getTitle(), reviewId, userId);
+            jdbcTemplate.update(CREATE_LIKE.getQuery(), reviewId, userId);
 //            Если есть дизлайк то прибавляем два оценке(одно из-за дизлайка, второй добавление лайка) и удаляем из
 //            таблицы "review_dislike" запись с дизлайком. в противном случае просто прибавляем к рейтингу один
             if (isDislike(reviewId, userId)) {
-                jdbcTemplate.update(ADD_TWO_USEFUL.getTitle(), reviewId);
-                jdbcTemplate.update(DELETE_DISLIKE.getTitle(), reviewId, userId);
+                jdbcTemplate.update(ADD_TWO_USEFUL.getQuery(), reviewId);
+                jdbcTemplate.update(DELETE_DISLIKE.getQuery(), reviewId, userId);
             } else {
-                jdbcTemplate.update(ADD_ONE_USEFUL.getTitle(), reviewId);
+                jdbcTemplate.update(ADD_ONE_USEFUL.getQuery(), reviewId);
             }
         }
     }
@@ -131,22 +131,22 @@ public class ReviewDaoImpl implements ReviewDao {
     @Override
     public void deleteLikeReview(Long reviewId, Long userId) {
         if (isLike(reviewId, userId)) {
-            jdbcTemplate.update(DELETE_LIKE.getTitle(), reviewId, userId);
-            jdbcTemplate.update(ADD_ONE_USEFUL.getTitle(), reviewId);
+            jdbcTemplate.update(DELETE_LIKE.getQuery(), reviewId, userId);
+            jdbcTemplate.update(ADD_ONE_USEFUL.getQuery(), reviewId);
         }
     }
 
     @Override
     public void addDislikeReview(Long reviewId, Long userId) {
         if (!isDislike(reviewId, userId)) {
-            jdbcTemplate.update(CREATE_DISLIKE.getTitle(), reviewId, userId);
+            jdbcTemplate.update(CREATE_DISLIKE.getQuery(), reviewId, userId);
 //            Если есть лайк то вычитаем два от оценки(одно из-за лайка, второй вычитание дизлайка) и удаляем из
 //            таблицы "review_like" запись с лайком. в противном случае просто отнимаем от рейтинга один
             if (isLike(reviewId, userId)) {
-                jdbcTemplate.update(SUBTRACT_TWO_USEFUL.getTitle(), reviewId);
-                jdbcTemplate.update(DELETE_LIKE.getTitle(), reviewId, userId);
+                jdbcTemplate.update(SUBTRACT_TWO_USEFUL.getQuery(), reviewId);
+                jdbcTemplate.update(DELETE_LIKE.getQuery(), reviewId, userId);
             } else {
-                jdbcTemplate.update(SUBTRACT_ONE_USEFUL.getTitle(), reviewId);
+                jdbcTemplate.update(SUBTRACT_ONE_USEFUL.getQuery(), reviewId);
             }
         }
     }
@@ -154,36 +154,36 @@ public class ReviewDaoImpl implements ReviewDao {
     @Override
     public void deleteDislikeReview(Long reviewId, Long userId) {
         if (isDislike(reviewId, userId)) {
-            jdbcTemplate.update(DELETE_DISLIKE.getTitle(), reviewId, userId);
-            jdbcTemplate.update(ADD_ONE_USEFUL.getTitle(), reviewId);
+            jdbcTemplate.update(DELETE_DISLIKE.getQuery(), reviewId, userId);
+            jdbcTemplate.update(ADD_ONE_USEFUL.getQuery(), reviewId);
         }
     }
 
     private boolean isLike(Long reviewId, Long userId) {
-        return 1 == jdbcTemplate.queryForObject(IS_LIKE.getTitle(), Integer.class, reviewId, userId);
+        return 1 == jdbcTemplate.queryForObject(IS_LIKE.getQuery(), Integer.class, reviewId, userId);
     }
 
     private boolean isDislike(Long reviewId, Long userId) {
-        return 1 == jdbcTemplate.queryForObject(IS_DISLIKE.getTitle(), Integer.class, reviewId, userId);
+        return 1 == jdbcTemplate.queryForObject(IS_DISLIKE.getQuery(), Integer.class, reviewId, userId);
     }
 
     @Override
     public List<Review> getReviewsByFilmIdLimited(Long filmId, Integer count) {
-        return jdbcTemplate.query(GET_SORT_REVIEW_BY_FILM_ID_WITH_COUNT.getTitle(), new ReviewMapper(), filmId, count);
+        return jdbcTemplate.query(GET_SORT_REVIEW_BY_FILM_ID_WITH_COUNT.getQuery(), new ReviewMapper(), filmId, count);
     }
 
     @Override
     public List<Review> getReviewsByFilmId(Long filmId) {
-        return jdbcTemplate.query(GET_SORT_REVIEW_BY_FILM_ID.getTitle(), new ReviewMapper(), filmId);
+        return jdbcTemplate.query(GET_SORT_REVIEW_BY_FILM_ID.getQuery(), new ReviewMapper(), filmId);
     }
 
     @Override
     public List<Review> getLimitedReviews(Integer count) {
-        return jdbcTemplate.query(GET_SORT_REVIEW_WITH_COUNT.getTitle(), new ReviewMapper(), count);
+        return jdbcTemplate.query(GET_SORT_REVIEW_WITH_COUNT.getQuery(), new ReviewMapper(), count);
     }
 
     @Override
     public List<Review> getAllReviews() {
-        return jdbcTemplate.query(GET_SORT_ALL_REVIEW.getTitle(), new ReviewMapper());
+        return jdbcTemplate.query(GET_SORT_ALL_REVIEW.getQuery(), new ReviewMapper());
     }
 }

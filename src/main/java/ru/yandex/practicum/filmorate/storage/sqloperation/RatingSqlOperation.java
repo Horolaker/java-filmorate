@@ -10,13 +10,13 @@ public enum RatingSqlOperation {
                     "FROM rating " +
                     "WHERE mpa_id = ?");
 
-    private final String title;
+    private final String query;
 
-    RatingSqlOperation(String title) {
-        this.title = title;
+    RatingSqlOperation(String query) {
+        this.query = query;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuery() {
+        return query;
     }
 }

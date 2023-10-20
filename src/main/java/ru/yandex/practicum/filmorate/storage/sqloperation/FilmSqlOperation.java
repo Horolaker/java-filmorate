@@ -122,13 +122,13 @@ public enum FilmSqlOperation {
                     "INNER JOIN GENRE AS g ON fg.genre_id = g.genre_id " +
                     "WHERE fg.FILM_ID = ?");
 
-    private final String title;
+    private final String query;
 
-    FilmSqlOperation(String title) {
-        this.title = title;
+    FilmSqlOperation(String query) {
+        this.query = query;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuery() {
+        return query;
     }
 }

@@ -14,14 +14,14 @@ public enum RecommendationSqlOperation {
             " ( SELECT film_id FROM film_like WHERE user_id = ? ) ");
 
 
-    private final String title;
+    private final String query;
 
-    RecommendationSqlOperation(String title) {
-        this.title = title;
+    RecommendationSqlOperation(String query) {
+        this.query = query;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuery() {
+        return query;
     }
 
 }

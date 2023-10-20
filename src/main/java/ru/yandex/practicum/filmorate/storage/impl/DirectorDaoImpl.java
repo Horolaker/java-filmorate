@@ -29,7 +29,7 @@ public class DirectorDaoImpl implements DirectorDao {
 
     @Override
     public Director updateDirector(Director director) {
-        jdbcTemplate.update(UPDATE_DIRECTOR.getTitle(),
+        jdbcTemplate.update(UPDATE_DIRECTOR.getQuery(),
                 director.getName(),
                 director.getId());
         return director;
@@ -37,31 +37,31 @@ public class DirectorDaoImpl implements DirectorDao {
 
     @Override
     public void deleteDirector(Long directorId) {
-        jdbcTemplate.update(DELETE_DIRECTOR.getTitle(), directorId);
+        jdbcTemplate.update(DELETE_DIRECTOR.getQuery(), directorId);
     }
 
     @Override
     public List<Director> getDirectorsList() {
-        return jdbcTemplate.query(GET_ALL_DIRECTORS.getTitle(), new DirectorMapper());
+        return jdbcTemplate.query(GET_ALL_DIRECTORS.getQuery(), new DirectorMapper());
     }
 
     @Override
     public Director getDirectorById(Long directorId) {
-        return jdbcTemplate.queryForObject(GET_DIRECTOR_BY_ID.getTitle(),
+        return jdbcTemplate.queryForObject(GET_DIRECTOR_BY_ID.getQuery(),
                 new DirectorMapper(), directorId);
     }
 
     @Override
     public List<Director> getDirectorByFilmId(Long filmId) {
-        if (jdbcTemplate.queryForList(GET_DIRECTOR_BY_FILM_ID.getTitle(), filmId).isEmpty()) {
+        if (jdbcTemplate.queryForList(GET_DIRECTOR_BY_FILM_ID.getQuery(), filmId).isEmpty()) {
             return List.of();
         }
-        return jdbcTemplate.query(GET_DIRECTOR_BY_FILM_ID.getTitle(), new DirectorMapper(), filmId);
+        return jdbcTemplate.query(GET_DIRECTOR_BY_FILM_ID.getQuery(), new DirectorMapper(), filmId);
     }
 
     @Override
     public boolean checkDirectorExistInDb(Long id) {
-        return !jdbcTemplate.query(GET_DIRECTOR_BY_ID.getTitle(), new DirectorMapper(), id).isEmpty();
+        return !jdbcTemplate.query(GET_DIRECTOR_BY_ID.getQuery(), new DirectorMapper(), id).isEmpty();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class DirectorDaoImpl implements DirectorDao {
         if (film.getDirectors() != null) {
             if (!film.getDirectors().isEmpty()) {
                 for (Director director : film.getDirectors()) {
-                    jdbcTemplate.update(ADD_DIRECTOR_TO_FILM.getTitle(), film.getId(), director.getId());
+                    jdbcTemplate.update(ADD_DIRECTOR_TO_FILM.getQuery(), film.getId(), director.getId());
                 }
             }
         }
@@ -77,6 +77,6 @@ public class DirectorDaoImpl implements DirectorDao {
 
     @Override
     public void deleteDirectorsFromFilm(Long filmId) {
-        jdbcTemplate.update(DELETE_DIRECTOR_FROM_FILM.getTitle(), filmId);
+        jdbcTemplate.update(DELETE_DIRECTOR_FROM_FILM.getQuery(), filmId);
     }
 }

@@ -19,13 +19,13 @@ public enum GenreSqlOperation {
                     "FROM film_genre " +
                     "WHERE film_id = ?");
 
-    private final String title;
+    private final String query;
 
-    GenreSqlOperation(String title) {
-        this.title = title;
+    GenreSqlOperation(String query) {
+        this.query = query;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuery() {
+        return query;
     }
 }

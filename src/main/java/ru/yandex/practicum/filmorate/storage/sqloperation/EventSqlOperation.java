@@ -18,14 +18,14 @@ public enum EventSqlOperation {
                     "WHERE event_id = ?"),
     ;
 
-    private final String title;
+    private final String query;
 
-    EventSqlOperation(String title) {
-        this.title = title;
+    EventSqlOperation(String query) {
+        this.query = query;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuery() {
+        return query;
     }
 
 

@@ -74,13 +74,13 @@ public enum ReviewSqlOperation {
                     "WHERE user_id = ? AND review_id = ?"),
     ;
 
-    private final String title;
+    private final String query;
 
-    ReviewSqlOperation(String title) {
-        this.title = title;
+    ReviewSqlOperation(String query) {
+        this.query = query;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuery() {
+        return query;
     }
 }
