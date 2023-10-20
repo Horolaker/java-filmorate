@@ -55,20 +55,14 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     private void userIdExistsValidation(Long userId) {
-        if (userId != null) {
-            userDao.getUserById(userId).isEmpty();
-        } else {
-            throw new UserNotExistException("Вместо id пользователя передано значение NULL. ");
+        if (userId == null || userDao.getUserById(userId).isEmpty()) {
+            throw new UserNotExistException("Пользователь с id: " + userId + " не найден");
         }
     }
 
     private void filmExistsValidation(Long filmId) {
         if (filmId == null || filmDao.getFilmById(filmId).isEmpty()){
-            if (filmDao.getFilmById(filmId).isEmpty()) {
-                throw new FilmNotExistException("Фильм с id: " + filmId + " не найден");
-            }
-        } else {
-            throw new FilmNotFoundException("Вместо id фильма передано значение NULL. ");
+            throw new FilmNotFoundException("Фильм с id: " + filmId + " не найден");
         }
     }
 
