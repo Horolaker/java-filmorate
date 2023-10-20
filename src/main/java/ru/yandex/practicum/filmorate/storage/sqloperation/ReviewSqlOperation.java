@@ -9,9 +9,6 @@ public enum ReviewSqlOperation {
             "UPDATE reviews " +
                     "SET content = ?, " +
                     "is_positive = ? " +
-//                        "user_id = ?, " +
-//                        "film_id = ?," +
-//                        "useful = ? " +
                     "WHERE review_id = ?"),
     DELETE_REVIEW(
             "DELETE FROM reviews " +
