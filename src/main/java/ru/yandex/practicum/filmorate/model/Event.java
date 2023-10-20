@@ -17,17 +17,17 @@ import java.util.Map;
 @Data
 @Builder
 public class Event implements Comparable<Event> {
-    Long eventId;
-
-    @NotNull @NotBlank @NotEmpty Long userId;
-
-    @NotNull @NotBlank @NotEmpty Long entityId;
-
-    @NotNull EventType eventType;
-
-    @NotNull OperationType operation;
-
-    @PastOrPresent Long timestamp;
+    private Long eventId;
+    @NotBlank
+    private Long userId;
+    @NotBlank
+    private Long entityId;
+    @NotNull
+    private EventType eventType;
+    @NotNull
+    private OperationType operation;
+    @PastOrPresent
+    private Long timestamp;
 
     public Map<String, Object> toMap() {
 
