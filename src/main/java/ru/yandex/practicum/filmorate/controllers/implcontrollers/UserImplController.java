@@ -26,6 +26,9 @@ public class UserImplController {
         this.eventService = eventService;
     }
 
+    /**
+     * Получить список всех user
+     */
     @GetMapping
     public List<User> findAll() {
         log.info("Получен GET-запрос /users");
@@ -34,6 +37,9 @@ public class UserImplController {
         return foundedUsers;
     }
 
+    /**
+     * Получить user по id
+     */
     @GetMapping("/{userId}")
     public Optional<User> findById(@PathVariable("userId") @Min(0) Long userId) {
         log.info("Получен GET-запрос /users/{}", userId);
@@ -42,6 +48,9 @@ public class UserImplController {
         return foundedUser;
     }
 
+    /**
+     * Создать пользователя
+     */
     @PostMapping
     public Optional<User> save(@RequestBody @Valid User user) {
         log.info("Получен POST-запрос /users с телом: {}", user);
@@ -50,6 +59,9 @@ public class UserImplController {
         return createdUser;
     }
 
+    /**
+     * Обновить пользователя
+     */
     @PutMapping
     public Optional<User> update(@RequestBody @Valid User user) {
         log.info("Получен PUT-запрос /users с телом: {}", user);
@@ -58,6 +70,9 @@ public class UserImplController {
         return updatedUser;
     }
 
+    /**
+     * Удалить пользователя
+     */
     @DeleteMapping("/{userId}")
     public void delete(@PathVariable("userId") @Min(0) Long userId) {
         log.info("Получен DELETE-запрос /users/{}", userId);
@@ -65,6 +80,9 @@ public class UserImplController {
         userService.delete(userId);
     }
 
+    /**
+     * Добавить друга
+     */
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable("id") @Min(0) Long userId,
                           @PathVariable("friendId") @Min(0) Long friendId) {
@@ -74,6 +92,9 @@ public class UserImplController {
         eventService.addEvent(userId, friendId, 1, "ADD");
     }
 
+    /**
+     * Удалить друга
+     */
     @DeleteMapping("/{id}/friends/{friendId}")
     public void deleteFriend(@PathVariable("id") @Min(0) Long userId,
                              @PathVariable("friendId") @Min(0) Long friendId) {
@@ -83,6 +104,9 @@ public class UserImplController {
         eventService.addEvent(userId, friendId, 1, "REMOVE");
     }
 
+    /**
+     * Посмотреть список друзей
+     */
     @GetMapping("/{id}/friends")
     public List<User> getFriends(@PathVariable("id") @Min(0) Long userId) {
         log.info("Получен GET-запрос /users/{id}/friends");
@@ -91,6 +115,9 @@ public class UserImplController {
         return friendList;
     }
 
+    /**
+     * Посмотреть общих друзей
+     */
     @GetMapping("/{id}/friends/common/{otherId}")
     public List<User> getCommonFriends(@PathVariable("id") @Min(0) Long userId,
                                        @PathVariable("otherId") @Min(0) Long friendId) {
@@ -102,6 +129,9 @@ public class UserImplController {
         return foundedCommonFriends;
     }
 
+    /**
+     * Возвращает рекомендации по фильмам для просмотра.
+     */
     @GetMapping("/{id}/recommendations")
     public List<Film> getRecommendations(@PathVariable("id") @Min(0) Long userId) {
         log.info("Получен GET-запрос /users/{id}/recommendations с id {}" + userId);
@@ -110,6 +140,9 @@ public class UserImplController {
         return recommendedFilms;
     }
 
+    /**
+     * Получить ленту активности
+     */
     @GetMapping("/{id}/feed")
     public List<Event> getUserFeed(@RequestBody @PathVariable("id") @Min(0) Long userId) {
         log.info("Получен GET-запрос users/{id}/feed с id {} ", userId);

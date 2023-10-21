@@ -23,6 +23,9 @@ public class MpaImplController {
         this.mpaService = mpaService;
     }
 
+    /**
+     * Получить список всех MPA
+     */
     @GetMapping
     public List<Rating> findAll() {
         log.debug("Пришел запрос GET /mpa");
@@ -31,6 +34,9 @@ public class MpaImplController {
         return foundedMpa;
     }
 
+    /**
+     * Получить mpa по id
+     */
     @GetMapping("/{mpaId}")
     public Optional<Rating> findById(@PathVariable Long mpaId) {
         log.info("Пришел GET-запрос /mpa/{}", mpaId);

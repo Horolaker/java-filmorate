@@ -23,6 +23,9 @@ public class ReviewImplController {
         this.eventService = eventService;
     }
 
+    /**
+     * Создать обзор
+     */
     @PostMapping
     public Optional<Review> save(@RequestBody @Valid Review review) {
         review.setUseful(0L);
@@ -33,6 +36,9 @@ public class ReviewImplController {
         return createdReview;
     }
 
+    /**
+     * Обновить обзор
+     */
     @PutMapping
     public Optional<Review> update(@RequestBody @Valid Review review) {
         log.info("Получен PUT-запрос /reviews с телом: {}", review);
@@ -42,6 +48,9 @@ public class ReviewImplController {
         return updatedReview;
     }
 
+    /**
+     * Удалить обзор
+     */
     @DeleteMapping("/{reviewId}")
     public void delete(@PathVariable("reviewId") @Min(0) Long reviewId) {
         eventService.addEvent(reviewService.findById(reviewId).get().getUserId(), reviewId, 3, "REMOVE");
@@ -50,6 +59,9 @@ public class ReviewImplController {
         log.info("Отправлен ответ на DELETE-запрос /reviews/{}", reviewId);
     }
 
+    /**
+     * Получить обзор по Id
+     */
     @GetMapping("/{reviewId}")
     public Optional<Review> findById(@PathVariable("reviewId") @Min(0) Long reviewId) {
         log.info("Получен GET-запрос /reviews/{}", reviewId);
@@ -58,6 +70,9 @@ public class ReviewImplController {
         return foundedReview;
     }
 
+    /**
+     * Получить обзор по film_id
+     */
     @GetMapping
     public List<Review> getReviewByFilmId(@RequestParam(value = "filmId", required = false) Long filmId,
                                           @RequestParam(value = "count", defaultValue = "10") int count) {
@@ -90,6 +105,9 @@ public class ReviewImplController {
         return filmsList;
     }
 
+    /**
+     * Добавить лайк обзору
+     */
     @PutMapping("/{id}/like/{userId}")
     public void addLikeReview(@PathVariable("id") @Min(0) Long reviewId,
                               @PathVariable("userId") @Min(0) Long userId) {
@@ -98,6 +116,9 @@ public class ReviewImplController {
         log.info("Отправлен ответ на PUT-запрос /reviews/{}/like/{}", reviewId, userId);
     }
 
+    /**
+     * Удалить лайк у обзора
+     */
     @DeleteMapping("/{id}/like/{userId}")
     public void deleteLikeReview(@PathVariable("id") @Min(0) Long reviewId,
                                  @PathVariable("userId") @Min(0) Long userId) {
@@ -106,6 +127,9 @@ public class ReviewImplController {
         log.info("Отправлен ответ на DELETE-запрос /reviews/{}/like/{}", reviewId, userId);
     }
 
+    /**
+     * Добавить дизлайк обзору
+     */
     @PutMapping("/{id}/dislike/{userId}")
     public void addDislikeReview(@PathVariable("id") @Min(0) Long reviewId,
                                  @PathVariable("userId") @Min(0) Long userId) {
@@ -114,6 +138,9 @@ public class ReviewImplController {
         log.info("Отправлен ответ на PUT-запрос /reviews/{}/dislike/{}", reviewId, userId);
     }
 
+    /**
+     * Удалить дизлайк у обзора
+     */
     @DeleteMapping("/{id}/dislike/{userId}")
     public void deleteDislikeReview(@PathVariable("id") @Min(0) Long reviewId,
                                     @PathVariable("userId") @Min(0) Long userId) {

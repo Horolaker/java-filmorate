@@ -24,6 +24,9 @@ public class FilmImplController {
         this.eventService = eventService;
     }
 
+    /**
+     * Получить список всех фильмов
+     */
     @GetMapping
     public List<Film> findAll() {
         log.debug("Пришел запрос GET /films");
@@ -32,6 +35,9 @@ public class FilmImplController {
         return foundedFilms;
     }
 
+    /**
+     * Получить фильм по id
+     */
     @GetMapping("/{filmId}")
     public Film findById(@PathVariable("filmId") @Min(0) Long filmId) {
         log.info("Получен GET-запрос /films/{}", filmId);
@@ -40,6 +46,9 @@ public class FilmImplController {
         return foundedFilm.get();
     }
 
+    /**
+     * Создать film
+     */
     @PostMapping
     public Film save(@RequestBody @Valid Film film) {
         log.info("Пришел POST-запрос /films с телом: {}", film);
@@ -48,6 +57,9 @@ public class FilmImplController {
         return createdFilm;
     }
 
+    /**
+     * Обновить фильм
+     */
     @PutMapping
     public Film update(@RequestBody @Valid Film film) {
         log.info("Пришел PUT-запрос /films с телом: {}", film);
@@ -56,6 +68,9 @@ public class FilmImplController {
         return updatedFilm.get();
     }
 
+    /**
+     * Удалить фильм
+     */
     @DeleteMapping("/{filmId}")
     public void delete(@PathVariable("filmId") @Min(0) Long filmId) {
         log.info("Получен DELETE-запрос /films/{}", filmId);
@@ -63,6 +78,9 @@ public class FilmImplController {
         filmService.delete(filmId);
     }
 
+    /**
+     * Возвращает список фильмов режиссера отсортированных по количеству лайков или году выпуска
+     */
     @GetMapping("/director/{directorId}")
     public List<Film> getSortedDirectorFilms(@PathVariable Long directorId,
                                              @RequestParam(defaultValue = "year") String sortBy) {
@@ -70,6 +88,9 @@ public class FilmImplController {
         return filmService.getSortedDirectorFilms(directorId, sortBy);
     }
 
+    /**
+     * Добавить лайк фильму
+     */
     @PutMapping("/{id}/like/{userId}")
     public void addLike(@PathVariable("id") @Min(0) Long filmId,
                         @PathVariable("userId") @Min(0) Long userId) {
@@ -80,6 +101,9 @@ public class FilmImplController {
 
     }
 
+    /**
+     * Удалить лайк
+     */
     @DeleteMapping("/{id}/like/{userId}")
     public void deleteLike(@PathVariable("id") @Min(0) Long filmId,
                            @PathVariable("userId") @Min(0) Long userId) {
@@ -90,6 +114,9 @@ public class FilmImplController {
 
     }
 
+    /**
+     * вывод общих с другом фильмов с сортировкой по их популярности
+     */
     @GetMapping("/common")
     public List<Film> getCommonFilms(@RequestParam long userId, @RequestParam long friendId) {
         log.info("Получен GET-запрос films/common?userId={userId}&friendId={friendId} с id {} " +
@@ -100,6 +127,9 @@ public class FilmImplController {
         return foundedCommonFilms;
     }
 
+    /**
+     * Возвращает список самых популярных фильмов указанного жанра за нужный год
+     */
     @GetMapping("/popular")
     public List<Film> getPopularFilms(@RequestParam(value = "count", required = false, defaultValue = "10") int count,
                                       @RequestParam(value = "genreId", required = false, defaultValue = "-1") Long genreId,
@@ -112,6 +142,9 @@ public class FilmImplController {
         return foundedPopularFilms;
     }
 
+    /**
+     * поиск по названию фильмов и по режиссёру
+     */
     @GetMapping("/search")
     public List<Film> searchFilms(@RequestParam String query, @RequestParam String by) {
         log.info("Получен GET-запрос /films/search?query={}&by={}", query, by);

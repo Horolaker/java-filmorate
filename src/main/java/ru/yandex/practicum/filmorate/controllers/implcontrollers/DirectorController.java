@@ -16,6 +16,9 @@ public class DirectorController {
 
     private final DirectorService directorService;
 
+    /**
+     * Создать режисера
+     */
     @PostMapping
     public Director createDirector(@RequestBody Director director) {
         log.info("Пришел POST-запрос /directors с телом: {}", director);
@@ -24,6 +27,9 @@ public class DirectorController {
         return createdDirector;
     }
 
+    /**
+     * Обновить режисера
+     */
     @PutMapping
     public Director updateDirector(@RequestBody Director director) {
         log.info("Пришел PUT-запрос /directors с телом: {}", director);
@@ -32,6 +38,9 @@ public class DirectorController {
         return updatedDirector;
     }
 
+    /**
+     * Получить список всех режисеров
+     */
     @GetMapping
     public List<Director> getAllDirector() {
         log.debug("Пришел запрос GET /directors");
@@ -40,6 +49,9 @@ public class DirectorController {
         return foundedDirectors;
     }
 
+    /**
+     * Получить режичера по id
+     */
     @GetMapping("/{directorId}")
     public Director getDirector(@PathVariable Long directorId) {
         log.info("Получен GET-запрос /directors/{}", directorId);
@@ -48,6 +60,9 @@ public class DirectorController {
         return foundedDirector;
     }
 
+    /**
+     * Удалить режисера по id
+     */
     @DeleteMapping("/{directorId}")
     public String deleteDirector(@PathVariable Long directorId) {
         log.info("Получен DELETE-запрос /directors/{}", directorId);
