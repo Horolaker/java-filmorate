@@ -9,7 +9,6 @@ import java.util.List;
 @Repository
 public interface EventDao {
 
-
     /**
      * Получить ленту событий по id пользователя
      */
