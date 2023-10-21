@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.storage.dao;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Event;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository
