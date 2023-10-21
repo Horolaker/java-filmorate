@@ -23,11 +23,17 @@ public class GenreDaoImpl implements GenreDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Genre> getGenres() {
         return jdbcTemplate.query(GET_ALL_GENRES.getQuery(), new GenreMapper());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Genre> getGenreById(Long genreId) {
         try {
@@ -38,12 +44,18 @@ public class GenreDaoImpl implements GenreDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Genre> getGenresByFilmId(Long filmId) {
         return jdbcTemplate.query(GET_GENRES_BY_FILM_ID.getQuery(), new GenreMapper(), filmId);
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Genre> getGenresIdByFilmId(Long filmId) {
         return jdbcTemplate.query(GET_GENRES_ID_BY_FILM_ID.getQuery(), new FilmGenreMapper(), filmId);

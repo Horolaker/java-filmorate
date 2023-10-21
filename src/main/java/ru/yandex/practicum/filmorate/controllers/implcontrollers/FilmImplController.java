@@ -76,7 +76,7 @@ public class FilmImplController {
         log.info("Получен PUT-запрос /films/{}/like/{}", filmId, userId);
         filmService.addLike(filmId, userId);
         log.info("Отправлен ответ на PUT-запрос /films/{}/like/{}", filmId, userId);
-        eventService.addEvent(userId, filmId, "LIKE", "ADD");
+        eventService.addEvent(userId, filmId, 2, "ADD");
 
     }
 
@@ -86,7 +86,7 @@ public class FilmImplController {
         log.info("Получен DELETE-запрос /films/{}/like/{}", filmId, userId);
         filmService.deleteLike(filmId, userId);
         log.info("Отправлен ответ на DELETE-запрос /films/{}/like/{}", filmId, userId);
-        eventService.addEvent(userId, filmId, "LIKE", "REMOVE");
+        eventService.addEvent(userId, filmId, 2, "REMOVE");
 
     }
 

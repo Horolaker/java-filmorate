@@ -25,17 +25,29 @@ public class UserDaoImpl implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> findAll() {
         return jdbcTemplate.query(GET_ALL_USERS.getQuery(), new UserMapper());
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> save(User user) {
         userInsertAndSetId(user);
         return Optional.of(user);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> update(User user) {
         jdbcTemplate.update(UPDATE_USER.getQuery(),
@@ -47,6 +59,10 @@ public class UserDaoImpl implements UserDao {
         return Optional.of(user);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Long userId) {
         try {
@@ -58,6 +74,9 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> getUserById(Long userId) {
         try {

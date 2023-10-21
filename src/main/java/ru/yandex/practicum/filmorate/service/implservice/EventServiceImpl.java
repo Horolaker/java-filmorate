@@ -21,8 +21,7 @@ public class EventServiceImpl {
         return this.eventDao.getUserFeed(id);
     }
 
-
-    public Event addEvent(Long userId, Long entityId, String eventType, String operationType) {
+    public Event addEvent(Long userId, Long entityId, Integer eventType, String operationType) {
         userService.findById(userId);
         return this.eventDao.addEvent(userId, entityId, eventType, operationType);
     }

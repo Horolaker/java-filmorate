@@ -29,7 +29,7 @@ public class ReviewImplController {
         log.info("Получен POST-запрос /reviews с телом: {}", review);
         Optional<Review> createdReview = reviewService.save(review);
         log.info("Отправлен ответ на POST-запрос /reviews с телом: {}", createdReview);
-        eventService.addEvent(review.getUserId(), Long.valueOf(review.getReviewId()), "REVIEW", "ADD");
+        eventService.addEvent(review.getUserId(), Long.valueOf(review.getReviewId()), 3, "ADD");
         return createdReview;
     }
 
@@ -38,13 +38,13 @@ public class ReviewImplController {
         log.info("Получен PUT-запрос /reviews с телом: {}", review);
         Optional<Review> updatedReview = reviewService.update(review);
         log.info("Отправлен ответ на PUT-запрос /reviews с телом: {}", updatedReview);
-        eventService.addEvent(updatedReview.get().getUserId(), review.getReviewId(), "REVIEW", "UPDATE");
+        eventService.addEvent(updatedReview.get().getUserId(), review.getReviewId(), 3, "UPDATE");
         return updatedReview;
     }
 
     @DeleteMapping("/{reviewId}")
     public void delete(@PathVariable("reviewId") @Min(0) Long reviewId) {
-        eventService.addEvent(reviewService.findById(reviewId).get().getUserId(), reviewId, "REVIEW", "REMOVE");
+        eventService.addEvent(reviewService.findById(reviewId).get().getUserId(), reviewId, 3, "REMOVE");
         log.info("Получен DELETE-запрос /reviews/{}", reviewId);
         reviewService.delete(reviewId);
         log.info("Отправлен ответ на DELETE-запрос /reviews/{}", reviewId);

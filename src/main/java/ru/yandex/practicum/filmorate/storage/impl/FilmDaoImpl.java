@@ -43,12 +43,18 @@ public class FilmDaoImpl implements FilmDao {
         this.directorDao = directorDao;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> findAll() {
         List<Film> foundedFilm = jdbcTemplate.query(GET_ALL_FILMS.getQuery(), new FilmMapper());
         return addGenreAndDirectorToFilms(foundedFilm);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Film save(Film film) {
         filmInsertAndSetId(film);
@@ -57,6 +63,9 @@ public class FilmDaoImpl implements FilmDao {
         return film;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Film> update(Film film) {
         jdbcTemplate.update(UPDATE_FILM.getQuery(),
@@ -72,6 +81,9 @@ public class FilmDaoImpl implements FilmDao {
         return Optional.of(film);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Long filmId) {
         try {
@@ -81,6 +93,9 @@ public class FilmDaoImpl implements FilmDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Film> getFilmById(Long filmId) {
         Optional<Film> film = getValidFilmByFilmId(filmId);
@@ -92,6 +107,9 @@ public class FilmDaoImpl implements FilmDao {
         return film;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> getSortedDirectorFilms(Long directorId, String sortBy) {
         List<Film> foundedFilm;
@@ -107,6 +125,9 @@ public class FilmDaoImpl implements FilmDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addLike(long filmId, long userId) {
         if (!isLikeExistsInFilm(filmId, userId)) {
@@ -114,11 +135,17 @@ public class FilmDaoImpl implements FilmDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteLike(long filmId, long userId) {
         jdbcTemplate.update(DELETE_LIKE.getQuery(), filmId, userId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> getSortedFilmsByLikes(Long count) {
         List<Film> sortedFilm = jdbcTemplate.query(GET_MOST_POPULAR_FILMS.getQuery(), new FilmMapper(), count);
@@ -130,23 +157,35 @@ public class FilmDaoImpl implements FilmDao {
         return sortedFilm;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Long> getLikesByFilmId(long filmId) {
         return jdbcTemplate.queryForList(GET_USER_LIKES_BY_FILM_ID.getQuery(), Long.class, filmId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> searchFilmsByDirector(String director) {
         List<Film> foundedFilms = jdbcTemplate.query(SEARCH_FILM_BY_DIRECTOR.getQuery(), new FilmMapper(), "%" + director + "%");
         return addGenreAndDirectorToFilms(foundedFilms);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> searchFilmsByTitle(String title) {
         List<Film> foundedFilms = jdbcTemplate.query(SEARCH_FILM_BY_TITLE.getQuery(), new FilmMapper(), "%" + title + "%");
         return addGenreAndDirectorToFilms(foundedFilms);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> searchFilmsByDirectorAndTitle(String query) {
         List<Film> foundedFilms = jdbcTemplate.query(SEARCH_FILM_BY_DIRECTOR_AND_TITLE.getQuery(), new FilmMapper(), "%" + query + "%", "%" + query + "%");
@@ -239,6 +278,9 @@ public class FilmDaoImpl implements FilmDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> getCommonFilms(long userId, long friendId) {
         List<Film> commonFilm = jdbcTemplate.query(GET_COMMON_FILMS.getQuery(), new FilmMapper(), userId, friendId);
@@ -250,6 +292,9 @@ public class FilmDaoImpl implements FilmDao {
         return commonFilm;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> getPopularFilms(long genreId, int year, int count) {
         List<Film> popularFilm = jdbcTemplate.query(GET_POPULAR_FILMS.getQuery(),

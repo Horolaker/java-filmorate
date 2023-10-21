@@ -20,6 +20,4 @@ public class EventMapper implements RowMapper<Event> {
                 .timestamp(rs.getLong("time_stamp"))
                 .build();
     }
-
-
 }

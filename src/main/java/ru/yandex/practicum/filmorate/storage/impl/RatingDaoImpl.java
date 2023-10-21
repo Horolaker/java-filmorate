@@ -24,11 +24,17 @@ public class RatingDaoImpl implements RatingDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Rating> getAllRatings() {
         return jdbcTemplate.query(GET_ALL_RATINGS.getQuery(), new RatingMapper());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Rating> getRatingById(Long ratingId) {
         try {

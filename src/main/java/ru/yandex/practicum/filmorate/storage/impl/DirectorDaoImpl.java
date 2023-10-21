@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.mapper.DirectorMapper;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.dao.DirectorDao;
+
 import static ru.yandex.practicum.filmorate.storage.sqloperation.DirectorSqlOperation.*;
 
 import java.util.List;
@@ -19,6 +20,9 @@ public class DirectorDaoImpl implements DirectorDao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Director createDirector(Director director) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
@@ -27,6 +31,9 @@ public class DirectorDaoImpl implements DirectorDao {
         return director;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Director updateDirector(Director director) {
         jdbcTemplate.update(UPDATE_DIRECTOR.getQuery(),
@@ -35,22 +42,34 @@ public class DirectorDaoImpl implements DirectorDao {
         return director;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteDirector(Long directorId) {
         jdbcTemplate.update(DELETE_DIRECTOR.getQuery(), directorId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Director> getDirectorsList() {
         return jdbcTemplate.query(GET_ALL_DIRECTORS.getQuery(), new DirectorMapper());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Director getDirectorById(Long directorId) {
         return jdbcTemplate.queryForObject(GET_DIRECTOR_BY_ID.getQuery(),
                 new DirectorMapper(), directorId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Director> getDirectorByFilmId(Long filmId) {
         if (jdbcTemplate.queryForList(GET_DIRECTOR_BY_FILM_ID.getQuery(), filmId).isEmpty()) {
@@ -59,11 +78,17 @@ public class DirectorDaoImpl implements DirectorDao {
         return jdbcTemplate.query(GET_DIRECTOR_BY_FILM_ID.getQuery(), new DirectorMapper(), filmId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean checkDirectorExistInDb(Long id) {
         return !jdbcTemplate.query(GET_DIRECTOR_BY_ID.getQuery(), new DirectorMapper(), id).isEmpty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addDirectorToFilm(Film film) {
         if (film.getDirectors() != null) {
@@ -75,6 +100,9 @@ public class DirectorDaoImpl implements DirectorDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteDirectorsFromFilm(Long filmId) {
         jdbcTemplate.update(DELETE_DIRECTOR_FROM_FILM.getQuery(), filmId);

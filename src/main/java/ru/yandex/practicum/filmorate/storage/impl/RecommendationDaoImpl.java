@@ -21,6 +21,9 @@ public class RecommendationDaoImpl implements RecommendationDao {
     private final JdbcTemplate jdbcTemplate;
     private final GenreDao genreDao;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Film> getRecommendation(Long userId) {
 

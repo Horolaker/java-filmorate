@@ -45,6 +45,9 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Review> save(Review review) {
         userIdExistsValidation(review.getUserId());
@@ -53,18 +56,9 @@ public class ReviewDaoImpl implements ReviewDao {
         return Optional.of(review);
     }
 
-    private void userIdExistsValidation(Long userId) {
-        if (userId == null || userDao.getUserById(userId).isEmpty()) {
-            throw new UserNotExistException("Пользователь с id: " + userId + " не найден");
-        }
-    }
-
-    private void filmExistsValidation(Long filmId) {
-        if (filmId == null || filmDao.getFilmById(filmId).isEmpty()) {
-            throw new FilmNotFoundException("Фильм с id: " + filmId + " не найден");
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Review> update(Review review) {
         userIdExistsValidation(review.getUserId());
@@ -78,12 +72,18 @@ public class ReviewDaoImpl implements ReviewDao {
         return getReviewById(review.getReviewId());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Long id) {
         jdbcTemplate.update(DELETE_REVIEW_DISLIKES.getQuery(), id);
         jdbcTemplate.update(DELETE_REVIEW.getQuery(), id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Review> getReviewById(Long reviewId) {
         try {
@@ -94,18 +94,9 @@ public class ReviewDaoImpl implements ReviewDao {
         }
     }
 
-    private SimpleJdbcInsert getReviewJdbcInsert() {
-        return new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName(REVIEW_TABLE_NAME)
-                .usingGeneratedKeyColumns(REVIEW_TABLE_ID_COLUMN_NAME);
-    }
-
-    private void reviewInsertAndSetId(Review review) {
-        SimpleJdbcInsert simpleJdbcInsert = getReviewJdbcInsert();
-        long userId = simpleJdbcInsert.executeAndReturnKey(review.toMap()).longValue();
-        review.setReviewId(userId);
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addLikeReview(Long reviewId, Long userId) {
         if (!isLike(reviewId, userId)) {
@@ -121,6 +112,9 @@ public class ReviewDaoImpl implements ReviewDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteLikeReview(Long reviewId, Long userId) {
         if (isLike(reviewId, userId)) {
@@ -129,6 +123,9 @@ public class ReviewDaoImpl implements ReviewDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addDislikeReview(Long reviewId, Long userId) {
         if (!isDislike(reviewId, userId)) {
@@ -144,12 +141,47 @@ public class ReviewDaoImpl implements ReviewDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteDislikeReview(Long reviewId, Long userId) {
         if (isDislike(reviewId, userId)) {
             jdbcTemplate.update(DELETE_DISLIKE.getQuery(), reviewId, userId);
             jdbcTemplate.update(ADD_ONE_USEFUL.getQuery(), reviewId);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Review> getReviewsByFilmIdLimited(Long filmId, Integer count) {
+        return jdbcTemplate.query(GET_SORT_REVIEW_BY_FILM_ID_WITH_COUNT.getQuery(), new ReviewMapper(), filmId, count);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Review> getReviewsByFilmId(Long filmId) {
+        return jdbcTemplate.query(GET_SORT_REVIEW_BY_FILM_ID.getQuery(), new ReviewMapper(), filmId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Review> getLimitedReviews(Integer count) {
+        return jdbcTemplate.query(GET_SORT_REVIEW_WITH_COUNT.getQuery(), new ReviewMapper(), count);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Review> getAllReviews() {
+        return jdbcTemplate.query(GET_SORT_ALL_REVIEW.getQuery(), new ReviewMapper());
     }
 
     private boolean isLike(Long reviewId, Long userId) {
@@ -160,23 +192,27 @@ public class ReviewDaoImpl implements ReviewDao {
         return 1 == jdbcTemplate.queryForObject(IS_DISLIKE.getQuery(), Integer.class, reviewId, userId);
     }
 
-    @Override
-    public List<Review> getReviewsByFilmIdLimited(Long filmId, Integer count) {
-        return jdbcTemplate.query(GET_SORT_REVIEW_BY_FILM_ID_WITH_COUNT.getQuery(), new ReviewMapper(), filmId, count);
+    private SimpleJdbcInsert getReviewJdbcInsert() {
+        return new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName(REVIEW_TABLE_NAME)
+                .usingGeneratedKeyColumns(REVIEW_TABLE_ID_COLUMN_NAME);
     }
 
-    @Override
-    public List<Review> getReviewsByFilmId(Long filmId) {
-        return jdbcTemplate.query(GET_SORT_REVIEW_BY_FILM_ID.getQuery(), new ReviewMapper(), filmId);
+    private void reviewInsertAndSetId(Review review) {
+        SimpleJdbcInsert simpleJdbcInsert = getReviewJdbcInsert();
+        long userId = simpleJdbcInsert.executeAndReturnKey(review.toMap()).longValue();
+        review.setReviewId(userId);
     }
 
-    @Override
-    public List<Review> getLimitedReviews(Integer count) {
-        return jdbcTemplate.query(GET_SORT_REVIEW_WITH_COUNT.getQuery(), new ReviewMapper(), count);
+    private void userIdExistsValidation(Long userId) {
+        if (userId == null || userDao.getUserById(userId).isEmpty()) {
+            throw new UserNotExistException("Пользователь с id: " + userId + " не найден");
+        }
     }
 
-    @Override
-    public List<Review> getAllReviews() {
-        return jdbcTemplate.query(GET_SORT_ALL_REVIEW.getQuery(), new ReviewMapper());
+    private void filmExistsValidation(Long filmId) {
+        if (filmId == null || filmDao.getFilmById(filmId).isEmpty()) {
+            throw new FilmNotFoundException("Фильм с id: " + filmId + " не найден");
+        }
     }
 }

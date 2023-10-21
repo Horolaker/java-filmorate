@@ -21,6 +21,10 @@ public class FriendshipDaoImpl implements FriendshipDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addFriend(long userId, long friendId) {
         if (isFriendDontExistsInUser(userId, friendId)) {
@@ -35,6 +39,9 @@ public class FriendshipDaoImpl implements FriendshipDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteFriend(long userId, long friendId) {
         jdbcTemplate.update(DELETE_FRIEND.getQuery(), userId, friendId);
@@ -43,11 +50,17 @@ public class FriendshipDaoImpl implements FriendshipDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getFriends(long userId) {
         return jdbcTemplate.query(GET_FRIENDS_BY_USER_ID.getQuery(), new UserMapper(), userId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getCommonFriends(long userId, long friendId) {
         return jdbcTemplate.query(GET_COMMON_FRIENDS.getQuery(), new UserMapper(), userId, friendId);

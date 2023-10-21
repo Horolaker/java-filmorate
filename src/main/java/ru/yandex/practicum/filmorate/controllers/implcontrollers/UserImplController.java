@@ -71,7 +71,7 @@ public class UserImplController {
         log.info("Получен PUT-запрос /users/{}/friends/{}", userId, friendId);
         userService.addFriend(userId, friendId);
         log.info("Отправлен ответ на PUT-запрос /users/{}/friends/{}", userId, friendId);
-        eventService.addEvent(userId, friendId, "FRIEND", "ADD");
+        eventService.addEvent(userId, friendId, 1, "ADD");
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
@@ -80,7 +80,7 @@ public class UserImplController {
         log.info("Получен DELETE-запрос /users/{}/friends/{}", userId, friendId);
         log.info("Отправлен ответ на DELETE-запрос /users/{}/friends/{}", userId, friendId);
         userService.deleteFriend(userId, friendId);
-        eventService.addEvent(userId, friendId, "FRIEND", "REMOVE");
+        eventService.addEvent(userId, friendId, 1, "REMOVE");
     }
 
     @GetMapping("/{id}/friends")

@@ -26,6 +26,9 @@ public class EventDaoImpl implements EventDao {
     private final JdbcTemplate jdbcTemplate;
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Event> getUserFeed(Long id) {
         List<Event> events = jdbcTemplate.query(GET_EVENT_BY_USER_ID.getQuery(), eventMapper, id);
@@ -36,8 +39,11 @@ public class EventDaoImpl implements EventDao {
         return events;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Event addEvent(Long userId, Long entityId, String eventType, String operationType) {
+    public Event addEvent(Long userId, Long entityId, Integer eventType, String operationType) {
 
         SimpleJdbcInsert eventInsertion = new SimpleJdbcInsert(jdbcTemplate).withTableName("events")
                 .usingGeneratedKeyColumns("event_id");
@@ -45,7 +51,7 @@ public class EventDaoImpl implements EventDao {
         Event event = Event.builder()
                 .userId(userId)
                 .entityId(entityId)
-                .eventType(Event.EventType.fromName(eventType))
+                .eventType(Event.EventType.findById(eventType))
                 .operation(Event.OperationType.fromName(operationType))
                 .timestamp(System.currentTimeMillis())
                 .build();
@@ -57,6 +63,9 @@ public class EventDaoImpl implements EventDao {
         return newEvent;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Event getEvent(Long id) {
         checkEventId(id);

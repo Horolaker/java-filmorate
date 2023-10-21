@@ -43,83 +43,60 @@ public class Event implements Comparable<Event> {
     }
 
     public enum EventType {
-        FRIEND("FRIEND"), LIKE("LIKE"), REVIEW("REVIEW");
+        FRIEND(1), LIKE(2), REVIEW(3);
 
-        private final String name;
+        private final int nameId;
 
-        EventType(String name) {
-            this.name = name;
+        EventType(int nameId) {
+            this.nameId = nameId;
         }
 
         @JsonValue
         public String getName() {
-            return name;
+            return this.findById(nameId).toString();
+        }
+
+        public static EventType findById(int nameId) {
+            for (EventType e : values()) {
+                if (e.nameId == nameId) {
+                    return e;
+                }
+            }
+            throw new UnsupportedOperationException(String.format("Неизвестный тип события: '%s'", nameId));
         }
 
         @JsonCreator
         public static EventType fromName(String name) {
-
-            if (name == null) {
-                return null;
-            }
-
-            switch (name) {
-                case "FRIEND": {
-                    return FRIEND;
-                }
-
-                case "LIKE": {
-                    return LIKE;
-                }
-
-                case "REVIEW": {
-                    return REVIEW;
-                }
-
-                default: {
-                    throw new UnsupportedOperationException(String.format("Неизвестный тип события: '%s'", name));
-                }
-            }
+            return EventType.valueOf(name);
         }
     }
 
     public enum OperationType {
-        ADD("ADD"), UPDATE("UPDATE"), REMOVE("REMOVE");
+        ADD(1), UPDATE(2), REMOVE(3);
 
-        private final String name;
+        private final int nameId;
 
-        OperationType(String name) {
-            this.name = name;
+        OperationType(int nameId) {
+            this.nameId = nameId;
         }
 
         @JsonValue
         public String getName() {
-            return name;
+            return findById(nameId).toString();
+        }
+
+        public static OperationType findById(int nameId) {
+            for (OperationType e : values()) {
+                if (e.nameId == nameId) {
+                    return e;
+                }
+            }
+            throw new UnsupportedOperationException(String.format("Неизвестная операция '%s'", nameId));
         }
 
         @JsonCreator
         public static OperationType fromName(String name) {
-
-            if (name == null) {
-                return null;
-            }
-
-            switch (name) {
-                case "ADD": {
-                    return ADD;
-                }
-
-                case "UPDATE": {
-                    return UPDATE;
-                }
-
-                case "REMOVE": {
-                    return REMOVE;
-                }
-                default: {
-                    throw new UnsupportedOperationException(String.format("Неизвестная операция: '%s'", name));
-                }
-            }
+            return OperationType.valueOf(name);
         }
     }
 
