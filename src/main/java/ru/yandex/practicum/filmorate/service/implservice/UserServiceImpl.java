@@ -1,13 +1,16 @@
 package ru.yandex.practicum.filmorate.service.implservice;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.exceptions.user.UserNotFoundException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.dao.FriendshipDao;
+import ru.yandex.practicum.filmorate.storage.dao.RecommendationDao;
 import ru.yandex.practicum.filmorate.storage.dao.UserDao;
 
 import java.util.List;
@@ -15,10 +18,12 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl {
 
     private UserDao userDao;
     private FriendshipDao friendshipDao;
+    private RecommendationDao recommendationsDao;
 
     public List<User> findAll() {
         return userDao.findAll();
@@ -95,6 +100,17 @@ public class UserServiceImpl {
             log.debug("Логин не должен содежать пробелы", user.getEmail());
             throw new ValidationException("Логин не должен содежать пробелы");
         }
+    }
+
+    public List<Film> getRecommendation(Long userId) {
+        userIdExistsValidation(userId);
+        return recommendationsDao.getRecommendation(userId);
+    }
+
+    @Autowired
+    @Qualifier("recommendationDaoImpl")
+    public void setRecommendationsDao(RecommendationDao recommendationsDao) {
+        this.recommendationsDao = recommendationsDao;
     }
 
     @Autowired

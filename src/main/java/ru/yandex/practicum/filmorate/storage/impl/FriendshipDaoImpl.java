@@ -21,36 +21,49 @@ public class FriendshipDaoImpl implements FriendshipDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addFriend(long userId, long friendId) {
         if (isFriendDontExistsInUser(userId, friendId)) {
             if (isUserExistsInFriend(userId, friendId)) {
-                jdbcTemplate.update(ADD_FRIEND.getTitle(), userId, friendId, true);
+                jdbcTemplate.update(ADD_FRIEND.getQuery(), userId, friendId, true);
                 updateToTrueStateOfFriendship(friendId, userId);
             } else {
-                jdbcTemplate.update(ADD_FRIEND.getTitle(), userId, friendId, false);
+                jdbcTemplate.update(ADD_FRIEND.getQuery(), userId, friendId, false);
             }
         } else {
             throw new FriendNotAddedException("Друг уже добавлен");
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteFriend(long userId, long friendId) {
-        jdbcTemplate.update(DELETE_FRIEND.getTitle(), userId, friendId);
+        jdbcTemplate.update(DELETE_FRIEND.getQuery(), userId, friendId);
         if (isUserExistsInFriend(userId, friendId)) {
             updateToFalseStateOfFriendship(friendId, userId);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getFriends(long userId) {
-        return jdbcTemplate.query(GET_FRIENDS_BY_USER_ID.getTitle(), new UserMapper(), userId);
+        return jdbcTemplate.query(GET_FRIENDS_BY_USER_ID.getQuery(), new UserMapper(), userId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getCommonFriends(long userId, long friendId) {
-        return jdbcTemplate.query(GET_COMMON_FRIENDS.getTitle(), new UserMapper(), userId, friendId);
+        return jdbcTemplate.query(GET_COMMON_FRIENDS.getQuery(), new UserMapper(), userId, friendId);
     }
 
     private boolean isFriendDontExistsInUser(long userId, long friendId) {
@@ -64,10 +77,10 @@ public class FriendshipDaoImpl implements FriendshipDao {
     }
 
     public void updateToTrueStateOfFriendship(long user1, long user2) {
-        jdbcTemplate.update(UPDATE_STATE_OF_FRIENDSHIP.getTitle(), true, user1, user2);
+        jdbcTemplate.update(UPDATE_STATE_OF_FRIENDSHIP.getQuery(), true, user1, user2);
     }
 
     public void updateToFalseStateOfFriendship(long user1, long user2) {
-        jdbcTemplate.update(UPDATE_STATE_OF_FRIENDSHIP.getTitle(), true, user1, user2);
+        jdbcTemplate.update(UPDATE_STATE_OF_FRIENDSHIP.getQuery(), true, user1, user2);
     }
 }

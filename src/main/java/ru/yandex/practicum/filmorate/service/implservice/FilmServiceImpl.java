@@ -5,11 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exceptions.UnknownSearchingParameterException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.exceptions.director.DirectorNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.film.FilmNotExistException;
 import ru.yandex.practicum.filmorate.exceptions.rating.RatingNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.user.UserNotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.storage.dao.FilmDao;
 import ru.yandex.practicum.filmorate.storage.dao.RatingDao;
 import ru.yandex.practicum.filmorate.storage.dao.UserDao;
@@ -27,17 +30,15 @@ public class FilmServiceImpl {
     private FilmDao filmDao;
     private RatingDao ratingDao;
     private UserDao userDao;
-
+    private DirectorDao directorDao;
 
     public List<Film> findAll() {
         return filmDao.findAll();
     }
 
-
     public Optional<Film> findById(Long filmId) {
         return filmDao.getFilmById(filmId);
     }
-
 
     public Film save(Film film) {
         filmValidation(film);
@@ -50,7 +51,6 @@ public class FilmServiceImpl {
         filmExistsValidation(film);
         return filmDao.update(film);
     }
-
 
     public void delete(Long filmId) {
         filmIdExistsValidation(filmId);
@@ -69,6 +69,14 @@ public class FilmServiceImpl {
         filmDao.deleteLike(filmId, userId);
     }
 
+    public List<Film> getSortedDirectorFilms(Long directorId, String sortBy) {
+        if (directorDao.checkDirectorExistInDb(directorId)) {
+            return filmDao.getSortedDirectorFilms(directorId, sortBy);
+        } else {
+            throw new DirectorNotFoundException("Режиссёр не найден");
+        }
+    }
+
     public List<Film> getSortedFilmsByLikes(Long count) {
         if (count < 0) {
             throw new FilmNotExistException("Не правильное количество популярных фильмов");
@@ -79,15 +87,27 @@ public class FilmServiceImpl {
         return filmDao.getSortedFilmsByLikes(count);
     }
 
+    public List<Film> searchFilms(String query, String by) {
+        if (by.equals("director")) {
+            return filmDao.searchFilmsByDirector(query);
+        } else if (by.equals("title")) {
+            return filmDao.searchFilmsByTitle(query);
+        } else if (by.equals("title,director") || by.equals("director,title")) {
+            return filmDao.searchFilmsByDirectorAndTitle(query);
+        } else {
+            throw new UnknownSearchingParameterException("Неверный пареметр поиска:" + by);
+        }
+    }
+
     private void filmExistsValidation(Film film) {
         if (film.getId() < 0 || filmDao.getFilmById(film.getId()).isEmpty()) {
-            throw new FilmNotExistException("Фильм  с id: " + film.getId() + " не найден");
+            throw new FilmNotExistException("Фильм с id: " + film.getId() + " не найден");
         }
     }
 
     private void filmIdExistsValidation(Long filmId) {
         if (filmDao.getFilmById(filmId).isEmpty()) {
-            throw new FilmNotExistException("Фильм  с id: " + filmId + " не найден");
+            throw new FilmNotExistException("Фильм с id: " + filmId + " не найден");
         }
     }
 
@@ -122,6 +142,16 @@ public class FilmServiceImpl {
         }
     }
 
+    public List<Film> getCommonFilms(Long userId, Long friendId) {
+        userIdExistsValidation(userId);
+        userIdExistsValidation(friendId);
+        return filmDao.getCommonFilms(userId, friendId);
+    }
+
+    public List<Film> getPopularFilms(Long genereId, int year, int count) {
+        return filmDao.getPopularFilms(genereId, year, count);
+    }
+
     @Autowired
     @Qualifier("filmDaoImpl")
     public void setFilmDao(FilmDao filmDao) {
@@ -138,5 +168,10 @@ public class FilmServiceImpl {
     @Qualifier("userDaoImpl")
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    @Autowired
+    public void setDirectorDao(DirectorDao directorDao) {
+        this.directorDao = directorDao;
     }
 }

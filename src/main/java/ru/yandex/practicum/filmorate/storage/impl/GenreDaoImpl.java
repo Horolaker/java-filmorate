@@ -23,29 +23,41 @@ public class GenreDaoImpl implements GenreDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Genre> getGenres() {
-        return jdbcTemplate.query(GET_ALL_GENRES.getTitle(), new GenreMapper());
+        return jdbcTemplate.query(GET_ALL_GENRES.getQuery(), new GenreMapper());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Genre> getGenreById(Long genreId) {
         try {
             return Optional.ofNullable(
-                    jdbcTemplate.queryForObject(GET_GENRE_BY_GENRE_ID.getTitle(), new GenreMapper(), genreId));
+                    jdbcTemplate.queryForObject(GET_GENRE_BY_GENRE_ID.getQuery(), new GenreMapper(), genreId));
         } catch (DataAccessException e) {
             throw new GenreNotFoundException("Рейтинг не найден" + e.getMessage());
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Genre> getGenresByFilmId(Long filmId) {
-        return jdbcTemplate.query(GET_GENRES_BY_FILM_ID.getTitle(), new GenreMapper(), filmId);
+        return jdbcTemplate.query(GET_GENRES_BY_FILM_ID.getQuery(), new GenreMapper(), filmId);
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Genre> getGenresIdByFilmId(Long filmId) {
-        return jdbcTemplate.query(GET_GENRES_ID_BY_FILM_ID.getTitle(), new FilmGenreMapper(), filmId);
+        return jdbcTemplate.query(GET_GENRES_ID_BY_FILM_ID.getQuery(), new FilmGenreMapper(), filmId);
     }
 }

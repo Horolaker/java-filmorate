@@ -25,20 +25,32 @@ public class UserDaoImpl implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> findAll() {
-        return jdbcTemplate.query(GET_ALL_USERS.getTitle(), new UserMapper());
+        return jdbcTemplate.query(GET_ALL_USERS.getQuery(), new UserMapper());
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> save(User user) {
         userInsertAndSetId(user);
         return Optional.of(user);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> update(User user) {
-        jdbcTemplate.update(UPDATE_USER.getTitle(),
+        jdbcTemplate.update(UPDATE_USER.getQuery(),
                 user.getName(),
                 user.getLogin(),
                 user.getEmail(),
@@ -47,22 +59,29 @@ public class UserDaoImpl implements UserDao {
         return Optional.of(user);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Long userId) {
         try {
-            jdbcTemplate.update(DELETE_FILM_LIKE_BY_USER_ID.getTitle(), userId);
-            jdbcTemplate.update(DELETE_FRIENDSHIP_BY_USER_ID.getTitle(), userId);
-            jdbcTemplate.update(DELETE_USER.getTitle(), userId);
+            jdbcTemplate.update(DELETE_FILM_LIKE_BY_USER_ID.getQuery(), userId);
+            jdbcTemplate.update(DELETE_FRIENDSHIP_BY_USER_ID.getQuery(), userId);
+            jdbcTemplate.update(DELETE_USER.getQuery(), userId);
         } catch (DataAccessException e) {
             throw new UserNotFoundException("Пользователь не найден" + e.getMessage());
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> getUserById(Long userId) {
         try {
             return Optional.ofNullable(
-                    jdbcTemplate.queryForObject(GET_USER_BY_USER_ID.getTitle(), new UserMapper(), userId));
+                    jdbcTemplate.queryForObject(GET_USER_BY_USER_ID.getQuery(), new UserMapper(), userId));
         } catch (DataAccessException e) {
             throw new UserNotFoundException("Пользователь не найден" + e.getMessage());
         }

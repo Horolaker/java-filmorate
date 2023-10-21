@@ -7,7 +7,13 @@ import java.util.Optional;
 
 public interface RatingDao {
 
+    /**
+     * Получить рейтинг
+     */
     List<Rating> getAllRatings();
 
+    /**
+     * Получить рейтинг по id
+     */
     Optional<Rating> getRatingById(Long ratingId);
 }

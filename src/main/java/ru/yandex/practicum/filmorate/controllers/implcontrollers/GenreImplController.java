@@ -23,6 +23,9 @@ public class GenreImplController {
         this.genreService = genreService;
     }
 
+    /**
+     * Получить список всех жанров
+     */
     @GetMapping
     public List<Genre> findAll() {
         log.debug("Пришел запрос GET /genres");
@@ -31,6 +34,9 @@ public class GenreImplController {
         return foundedGenres;
     }
 
+    /**
+     * Найти жанр по id
+     */
     @GetMapping("/{genreId}")
     public Optional<Genre> findById(@PathVariable Long genreId) {
         log.info("Пришел GET-запрос /genres/{}", genreId);

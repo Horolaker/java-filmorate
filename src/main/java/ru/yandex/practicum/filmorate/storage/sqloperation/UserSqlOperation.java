@@ -42,13 +42,13 @@ public enum UserSqlOperation {
                     "JOIN FRIENDSHIP AS fr2 ON us.user_id = fr2.friend_id " +
                     "WHERE fr1.user_id = ? AND fr2.user_id = ?");
 
-    private final String title;
+    private final String query;
 
-    UserSqlOperation(String title) {
-        this.title = title;
+    UserSqlOperation(String query) {
+        this.query = query;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuery() {
+        return query;
     }
 }

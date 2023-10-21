@@ -26,6 +26,7 @@ public class Film {
     @JsonIgnore
     private Set<Long> filmLikes;
     private List<Genre> genres;
+    private List<Director> directors;
 
     public boolean setFilmLikes(Long friendId) {
         if (filmLikes == null) {
